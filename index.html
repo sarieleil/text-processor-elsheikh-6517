@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Processor - Elsheikh Mohamed (6517)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); padding: 30px; }
+        h1 { color: #667eea; text-align: center; margin-bottom: 10px; font-size: 2.5em; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 10px; }
+        .student-info { text-align: center; color: #667eea; font-weight: bold; margin-bottom: 30px; padding: 10px; background: #f0f4ff; border-radius: 8px; }
+        .question-section { background: #f8f9fa; border-radius: 10px; padding: 25px; margin-bottom: 30px; border-left: 5px solid #667eea; }
+        .question-title { color: #333; font-size: 1.5em; margin-bottom: 15px; display: flex; align-items: center; }
+        .question-number { background: #667eea; color: white; width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold; }
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #555; font-weight: 600; }
+        input[type="text"], textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        input[type="text"]:focus, textarea:focus { outline: none; border-color: #667eea; }
+        textarea { min-height: 120px; resize: vertical; font-family: inherit; }
+        .button-group { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 15px; }
+        button { padding: 12px 25px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600; transition: all 0.3s; flex: 1; min-width: 150px; color: white; }
+        .btn-primary { background: #667eea; }
+        .btn-secondary { background: #48bb78; }
+        .btn-danger { background: #f56565; }
+        .btn-warning { background: #ed8936; }
+        button:hover { transform: translateY(-2px); opacity: 0.9; }
+        .results { margin-top: 20px; padding: 20px; background: white; border-radius: 8px; border: 2px solid #e2e8f0; display: none; }
+        .results h3 { color: #667eea; margin-bottom: 15px; }
+        .result-item { padding: 10px; margin: 8px 0; background: #f7fafc; border-radius: 5px; border-left: 3px solid #667eea; }
+        .modified-text { background: #fff5f5; padding: 15px; border-radius: 5px; border: 1px solid #feb2b2; margin-top: 10px; white-space: pre-wrap; word-wrap: break-word; }
+        .word-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .word-tag { background: #667eea; color: white; padding: 5px 12px; border-radius: 15px; font-size: 13px; }
+        .bigram { background: #e6fffa; padding: 10px; margin: 5px 0; border-radius: 5px; border-left: 3px solid #38b2ac; }
+        .stopword-tag { background: #fed7d7; color: #c53030; padding: 5px 12px; border-radius: 15px; font-size: 13px; display: inline-flex; align-items: center; gap: 5px; margin: 3px; }
+        .remove-stopword { cursor: pointer; font-weight: bold; }
+        .info-text { color: #718096; font-size: 0.9em; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📝 Text Processor Application</h1>
+        <p class="subtitle">Cloud Computing Assignment - Questions 10, 11, 12</p>
+        <div class="student-info">Student: Elsheikh Mohamed | ID: 1001486517 | Last Digits: 6517</div>
+        
+        <div class="question-section">
+            <h2 class="question-title"><span class="question-number">10</span>Character Analysis & Replacement</h2>
+            <div class="input-group">
+                <label>String S (1-10 characters):</label>
+                <input type="text" id="q10_S" maxlength="10" placeholder="Enter string S (e.g., 'abc')">
+            </div>
+            <div class="input-group">
+                <label>Text Box T:</label>
+                <textarea id="q10_T" placeholder="Enter text to analyze..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Character C (for replacement):</label>
+                <input type="text" id="q10_C" maxlength="1" placeholder="Enter single character">
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="processQ10('count')">Count Characters</button>
+                <button class="btn-secondary" onclick="processQ10('frequency')">Calculate Frequency</button>
+                <button class="btn-danger" onclick="processQ10('replace')">Replace Characters</button>
+            </div>
+            <div id="q10_results" class="results"></div>
+        </div>
+        
+        <div class="question-section">
+            <h2 class="question-title"><span class="question-number">11</span>Word Analysis by Character</h2>
+            <div class="input-group">
+                <label>String S (1-10 characters):</label>
+                <input type="text" id="q11_S" maxlength="10" placeholder="Enter string S (e.g., 'ab')">
+            </div>
+            <div class="input-group">
+                <label>Text Box T:</label>
+                <textarea id="q11_T" placeholder="Enter text with words..."></textarea>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="processQ11('count')">Count All Words</button>
+                <button class="btn-secondary" onclick="processQ11('list_by_char')">List Words by Character</button>
+            </div>
+            <div id="q11_results" class="results"></div>
+        </div>
+        
+        <div class="question-section">
+            <h2 class="question-title"><span class="question-number">12</span>Stop Words & Bi-grams (Bonus)</h2>
+            <div class="input-group">
+                <label>String S (1-10 characters):</label>
+                <input type="text" id="q12_S" maxlength="10" placeholder="Enter string S (e.g., 'ab')">
+            </div>
+            <div class="input-group">
+                <label>Text Box T:</label>
+                <textarea id="q12_T" placeholder="Enter text..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>Stop Words P (up to 10 words):</label>
+                <input type="text" id="q12_stopword_input" placeholder="Type a stop word and press Enter">
+                <p class="info-text">Press Enter after typing each stop word. Maximum 10 words.</p>
+                <div id="q12_stopwords_display"></div>
+            </div>
+            <div class="button-group">
+                <button class="btn-primary" onclick="processQ12('remove_stopwords')">Remove Stop Words</button>
+                <button class="btn-warning" onclick="processQ12('bigrams')">Show Bi-grams (Bonus)</button>
+            </div>
+            <div id="q12_results" class="results"></div>
+        </div>
+    </div>
+    
+    <script>
+        let stopWords = [];
+        
+        document.getElementById('q12_stopword_input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const word = this.value.trim();
+                if (word && stopWords.length < 10 && !stopWords.includes(word)) {
+                    stopWords.push(word);
+                    updateStopWordsDisplay();
+                    this.value = '';
+                }
+            }
+        });
+        
+        function updateStopWordsDisplay() {
+            document.getElementById('q12_stopwords_display').innerHTML = stopWords.map((word, index) => 
+                `<span class="stopword-tag">${word} <span class="remove-stopword" onclick="removeStopWord(${index})">✕</span></span>`
+            ).join(' ');
+        }
+        
+        function removeStopWord(index) {
+            stopWords.splice(index, 1);
+            updateStopWordsDisplay();
+        }
+        
+        async function processQ10(operation) {
+            const S = document.getElementById('q10_S').value;
+            const T = document.getElementById('q10_T').value;
+            const C = document.getElementById('q10_C').value;
+            
+            if (!S || !T) {
+                alert('Please enter both S and T values');
+                return;
+            }
+            
+            if (operation === 'replace' && !C) {
+                alert('Please enter character C for replacement');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/process_q10', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({S, T, C, operation})
+                });
+                
+                const data = await response.json();
+                displayQ10Results(data, operation);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred');
+            }
+        }
+        
+        function displayQ10Results(data, operation) {
+            const resultsDiv = document.getElementById('q10_results');
+            let html = '<h3>Results:</h3>';
+            
+            if (operation === 'count') {
+                html += '<div class="result-item"><strong>Character Counts:</strong><br>';
+                for (const [char, count] of Object.entries(data.counts)) {
+                    html += `Character '${char}': ${count} times<br>`;
+                }
+                html += '</div>';
+            } else if (operation === 'frequency') {
+                html += '<div class="result-item"><strong>Character Frequencies:</strong><br>';
+                for (const [char, info] of Object.entries(data.frequencies)) {
+                    html += `Character '${char}': ${info.count} times (${info.frequency})<br>`;
+                }
+                html += '</div>';
+            } else if (operation === 'replace') {
+                html += `<div class="result-item"><strong>Characters Replaced:</strong> ${data.replaced_count}</div>`;
+                html += '<div class="result-item"><strong>Original Text:</strong><div class="modified-text">' + data.original_text + '</div></div>';
+                html += '<div class="result-item"><strong>Modified Text:</strong><div class="modified-text">' + data.modified_text + '</div></div>';
+            }
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+        
+        async function processQ11(operation) {
+            const S = document.getElementById('q11_S').value;
+            const T = document.getElementById('q11_T').value;
+            
+            if (!S || !T) {
+                alert('Please enter both S and T values');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/process_q11', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({S, T, operation})
+                });
+                
+                const data = await response.json();
+                displayQ11Results(data, operation);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred');
+            }
+        }
+        
+        function displayQ11Results(data, operation) {
+            const resultsDiv = document.getElementById('q11_results');
+            let html = '<h3>Results:</h3>';
+            
+            if (operation === 'count') {
+                html += `<div class="result-item"><strong>Total Word Count:</strong> ${data.word_count}</div>`;
+                html += '<div class="result-item"><strong>Words Found:</strong><div class="word-list">';
+                data.words.forEach(word => {
+                    html += `<span class="word-tag">${word}</span>`;
+                });
+                html += '</div></div>';
+            } else if (operation === 'list_by_char') {
+                for (const [char, words] of Object.entries(data.words_by_char)) {
+                    html += `<div class="result-item"><strong>Character '${char}':</strong>`;
+                    if (words.length > 0) {
+                        html += '<div class="word-list">';
+                        words.forEach(word => {
+                            html += `<span class="word-tag">${word}</span>`;
+                        });
+                        html += '</div>';
+                    } else {
+                        html += ' No words found';
+                    }
+                    html += '</div>';
+                }
+            }
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+        
+        async function processQ12(operation) {
+            const S = document.getElementById('q12_S').value;
+            const T = document.getElementById('q12_T').value;
+            
+            if (!S || !T) {
+                alert('Please enter both S and T values');
+                return;
+            }
+            
+            if (stopWords.length === 0 && operation === 'remove_stopwords') {
+                alert('Please add at least one stop word');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/process_q12', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({S, T, P: stopWords, operation})
+                });
+                
+                const data = await response.json();
+                displayQ12Results(data, operation);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred');
+            }
+        }
+        
+        function displayQ12Results(data, operation) {
+            const resultsDiv = document.getElementById('q12_results');
+            let html = '<h3>Results:</h3>';
+            
+            if (operation === 'remove_stopwords') {
+                html += `<div class="result-item"><strong>Stop Words Removed:</strong> ${data.removed_count}</div>`;
+                html += '<div class="result-item"><strong>Original Text:</strong><div class="modified-text">' + data.original_text + '</div></div>';
+                html += '<div class="result-item"><strong>Filtered Text:</strong><div class="modified-text">' + data.filtered_text + '</div></div>';
+            } else if (operation === 'bigrams') {
+                html += '<div class="result-item"><strong>Bi-grams for words beginning with characters in S:</strong><br>';
+                if (Object.keys(data.bigrams).length > 0) {
+                    for (const [word, bigrams] of Object.entries(data.bigrams)) {
+                        html += `<strong>Word: ${word}</strong><br>`;
+                        bigrams.forEach(bigram => {
+                            html += `<div class="bigram">${bigram}</div>`;
+                        });
+                    }
+                } else {
+                    html += '<em>No bi-grams found</em>';
+                }
+                html += '</div>';
+            }
+            
+            resultsDiv.innerHTML = html;
+            resultsDiv.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
